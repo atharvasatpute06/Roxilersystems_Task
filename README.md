@@ -1,71 +1,78 @@
-# Role-Based Store Rating Dashboard
+# ⭐️ Role-Based Store Rating Dashboard (React + Node + PostgreSQL)
 
-This project is a full-stack role-based dashboard system that allows:
-- Admins to manage users and stores
-- Store Owners to view user ratings and update their password
-- Normal Users to browse stores and rate them
+This is a full-stack web application built to manage and rate local stores based on user roles. It supports three types of users: Admin, Store Owner, and Normal User — each with tailored dashboard functionality.
 
 ---
 
-## Tech Stack
+## 📌 Overview
 
-- **Frontend:** React.js (Vite)
-- **Backend:** Node.js + Express
-- **Database:** PostgreSQL
-- **Deployment Ready:** Localhost (can be adapted to any cloud setup)
+This project was built as part of a technical evaluation and showcases:
+- Role-based login and navigation
+- Dynamic data fetching via REST APIs
+- Store rating functionality
+- Password update flow for all roles
+- Professional, responsive UI
 
 ---
 
-## Features & Roles
+## 🛠 Tech Stack
 
-###  Admin
-- Login and logout
-- Add new users (admin/user/store)
-- View and sort all registered users and stores
-- See total stats (users/stores/ratings)
+| Layer       | Technology           |
+|-------------|----------------------|
+| Frontend    | React.js (Vite)      |
+| Backend     | Node.js + Express    |
+| Database    | PostgreSQL           |
+| Styling     | Inline CSS / Flexbox |
+| Hosting     | Localhost-ready      |
 
-###  Store Owner
-- Login and logout
+---
+
+## ✅ Features by Role
+
+### 👤 Admin
+- Secure login
+- View total users, stores, and ratings count
+- Add new users with roles (Admin / Store Owner / User)
+- View, search, and sort all users and stores
+- Logout
+
+### 🏪 Store Owner
+- Secure login
 - View a list of users who rated their store
-- View average rating
-- Update password
+- View average store rating
+- Update their password
+- Logout
 
-###  User
-- Login and logout
-- Browse all stores
-- Submit or update ratings (1–5)
+### 🙋 Normal User
+- Secure login
+- View list of stores
+- Submit or update store ratings (1–5)
+- Search by name/address
 - Update password
+- Logout
 
 ---
 
-## 📂 Folder Structure
+## 📁 Folder Structure
 
 project-root/
 ├── client/ # React frontend
+│ ├── pages/
+│ └── components/
 ├── server/ # Express backend
 │ ├── routes/
-│ ├── config/
-│ └── index.js
-└── database/
-└── schema.sql # SQL setup script
+│ └── config/
+├── database/
+│ └── schema.sql # SQL setup script
+└── README.md # Project documentation
 
 
----
-
-## 🧪 Evaluation Checklist (for Review Team)
-
-✅ A clearly defined database schema  
-✅ SQL file with relevant scripts (see `/database/schema.sql`)  
-✅ Role-based routing and UI logic  
-✅ Clean and functional UI with responsive layout  
-✅ Password update and rating submission flows  
-✅ GitHub repository is **public** and accessible  
 
 ---
 
 ## 🧬 Database Schema
 
-### `users` table
+### users table
 ```sql
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
@@ -82,7 +89,3 @@ CREATE TABLE ratings (
   store_id INTEGER REFERENCES users(id),
   rating INTEGER CHECK (rating BETWEEN 1 AND 5)
 );
-
-psql -U postgres -d yourdbname -f database/schema.sql
-
-
