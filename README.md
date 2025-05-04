@@ -1,10 +1,10 @@
-# ⭐️ Role-Based Store Rating Dashboard (React + Node + PostgreSQL)
+#  Role-Based Store Rating Dashboard (React + Node + PostgreSQL)
 
 This is a full-stack web application built to manage and rate local stores based on user roles. It supports three types of users: Admin, Store Owner, and Normal User — each with tailored dashboard functionality.
 
 ---
 
-## 📌 Overview
+##  Overview
 
 This project was built as part of a technical evaluation and showcases:
 - Role-based login and navigation
@@ -15,7 +15,7 @@ This project was built as part of a technical evaluation and showcases:
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 | Layer       | Technology           |
 |-------------|----------------------|
@@ -27,23 +27,23 @@ This project was built as part of a technical evaluation and showcases:
 
 ---
 
-## ✅ Features by Role
+##  Features by Role
 
-### 👤 Admin
+###  Admin
 - Secure login
 - View total users, stores, and ratings count
 - Add new users with roles (Admin / Store Owner / User)
 - View, search, and sort all users and stores
 - Logout
 
-### 🏪 Store Owner
+###  Store Owner
 - Secure login
 - View a list of users who rated their store
 - View average store rating
 - Update their password
 - Logout
 
-### 🙋 Normal User
+###  Normal User
 - Secure login
 - View list of stores
 - Submit or update store ratings (1–5)
@@ -53,7 +53,7 @@ This project was built as part of a technical evaluation and showcases:
 
 ---
 
-## 📁 Folder Structure
+##  Folder Structure
 
 project-root/
 ├── client/ # React frontend
@@ -63,29 +63,63 @@ project-root/
 │ ├── routes/
 │ └── config/
 ├── database/
-│ └── schema.sql # SQL setup script
 └── README.md # Project documentation
 
 
 
 ---
 
-## 🧬 Database Schema
+##  Database Schema
 
-### users table
+###  `users` Table
+
+| Field     | Type     | Description                     |
+|-----------|----------|---------------------------------|
+| id        | SERIAL   | Primary Key                     |
+| name      | TEXT     | Full Name                       |
+| email     | TEXT     | Unique Email                    |
+| password  | TEXT     | Plain or encrypted password     |
+| address   | TEXT     | Address                         |
+| role      | TEXT     | 'user', 'store', or 'admin'     |
+
+###  `ratings` Table
+
+| Field     | Type     | Description                     |
+|-----------|----------|---------------------------------|
+| id        | SERIAL   | Primary Key                     |
+| user_id   | INTEGER  | FK → users.id (who rated)       |
+| store_id  | INTEGER  | FK → users.id (store rated)     |
+| rating    | INTEGER  | 1 to 5                          |
+
+---
+
+##  Why These Tables?
+
+- `users`: Manages all users under one roof with a `role` column for distinction.
+- `ratings`: Keeps track of who rated whom and the score, forming a many-to-many relationship.
+
+---
+
+## Backend Filtering Logic
+
+### Route: `/api/stores/all-with-ratings?userId=1`
+
+- Fetches **only store owners**
+- Joins `ratings` table to:
+  - Calculate the **average rating** for each store
+  - Show the **current user's rating** (if any) using a **LEFT JOIN** with `userId`
+
+### SQL Snippet:
+
 ```sql
-CREATE TABLE users (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(60) NOT NULL,
-  email VARCHAR(100) UNIQUE NOT NULL,
-  password VARCHAR(100) NOT NULL,
-  address TEXT,
-  role VARCHAR(10) NOT NULL CHECK (role IN ('admin', 'user', 'store'))
-);
-
-CREATE TABLE ratings (
-  id SERIAL PRIMARY KEY,
-  user_id INTEGER REFERENCES users(id),
-  store_id INTEGER REFERENCES users(id),
-  rating INTEGER CHECK (rating BETWEEN 1 AND 5)
-);
+SELECT 
+  u.id,
+  u.name,
+  u.address,
+  COALESCE(AVG(r.rating), 0) AS average_rating,
+  ur.rating AS user_rating
+FROM users u
+LEFT JOIN ratings r ON u.id = r.store_id
+LEFT JOIN ratings ur ON u.id = ur.store_id AND ur.user_id = $1
+WHERE u.role = 'store'
+GROUP BY u.id, ur.rating;
