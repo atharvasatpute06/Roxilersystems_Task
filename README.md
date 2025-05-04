@@ -5,7 +5,7 @@ This is a full-stack web application built to manage and rate local stores based
 ---
 **Demo Video:**  
 The screen recording of the project is included in this repository.  
-Please download the video file from the (.demovideo) folder to view the full working of the project.
+Please download the video file from the (Demo Project(1).mp4)  to view the full working of the project.
 
 
 ##  Overview
@@ -134,4 +134,11 @@ WHERE u.role = 'store'
 GROUP BY u.id, ur.rating;
 
 
-[▶️ Watch Demo](./demo/demo-video.mp4)
+**Demo Video:**  
+The screen recording of the project is included in this repository.  
+Please download the video file from the (Demo Project(1).mp4)  to view the full working of the project.
+
+
+---
+
+Thank you for checking out the project! 
