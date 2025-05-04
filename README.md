@@ -3,6 +3,10 @@
 This is a full-stack web application built to manage and rate local stores based on user roles. It supports three types of users: Admin, Store Owner, and Normal User — each with tailored dashboard functionality.
 
 ---
+**Demo Video:**  
+The screen recording of the project is included in this repository.  
+Please download the video file from the (.demovideo) folder to view the full working of the project.
+
 
 ##  Overview
 
@@ -120,6 +124,11 @@ SELECT
   ur.rating AS user_rating
 FROM users u
 LEFT JOIN ratings r ON u.id = r.store_id
+
+
+**Demo Video:**  
+The screen recording of the project is included in this repository.  
+Please download the video file from the (.demovideo) folder to view the full working of the project.
 LEFT JOIN ratings ur ON u.id = ur.store_id AND ur.user_id = $1
 WHERE u.role = 'store'
 GROUP BY u.id, ur.rating;
