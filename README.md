@@ -123,3 +123,6 @@ LEFT JOIN ratings r ON u.id = r.store_id
 LEFT JOIN ratings ur ON u.id = ur.store_id AND ur.user_id = $1
 WHERE u.role = 'store'
 GROUP BY u.id, ur.rating;
+
+
+[▶️ Watch Demo](./demo/demo-video.mp4)
